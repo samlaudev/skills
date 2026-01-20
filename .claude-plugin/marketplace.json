@@ -1,0 +1,20 @@
+{
+  "name": "samlau-agent-skills",
+  "owner": {
+    "name": "Sam Lau",
+    "email": "samlaudev@gmail.com"
+  },
+  "metadata": {
+    "description": "Sam Lau's skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "prompt-engineering-skills",
+      "description": "Collection of prompt engineering tools featuring 57 proven frameworks for crafting optimized AI prompts across various domains including marketing, decision analysis, education, product development, creative writing, and complex reasoning",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/prompt-optimizer"]
+    }
+  ]
+}
