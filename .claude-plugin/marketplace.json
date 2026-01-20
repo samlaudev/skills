@@ -15,6 +15,32 @@
       "source": "./",
       "strict": false,
       "skills": ["./skills/prompt-optimizer"]
+    },
+    {
+      "name": "skill-creator",
+      "description": "Tool for creating new skills",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/skill-creator"]
+    },
+    {
+      "name": "mcp-builder",
+      "description": "Tool for building MCPs",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/mcp-builder"]
+    },
+    {
+      "name": "document-skills",
+      "description": "Collection of document processing suite including Excel, Word, PowerPoint, and PDF capabilities",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/xlsx",
+        "./skills/docx",
+        "./skills/pptx",
+        "./skills/pdf"
+      ]
     }
   ]
 }
