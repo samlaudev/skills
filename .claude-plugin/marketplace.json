@@ -41,13 +41,6 @@
         "./skills/pptx",
         "./skills/pdf"
       ]
-    },
-    {
-      "name": "xcodegen-migration",
-      "description": "Migrate existing iOS projects to XcodeGen for eliminating .xcodeproj merge conflicts, improving maintainability, and streamlining release processes. Use when migrating an existing iOS project to XcodeGen, setting up XcodeGen for a new iOS project, troubleshooting XcodeGen migration issues, or converting legacy Xcode project files to project.yml",
-      "source": "./",
-      "strict": false,
-      "skills": ["./skills/xcodegen-migration"]
     }
   ]
 }
