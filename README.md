@@ -10,6 +10,7 @@ This plugin marketplace provides ready-to-use skills that enhance Claude Code's 
 - **Skill Development** - Tools for creating custom Claude Code skills
 - **MCP Building** - Framework for building Model Context Protocol servers
 - **Document Processing** - Excel, Word, PowerPoint, and PDF manipulation capabilities
+- **iOS Development** - XcodeGen migration tools for eliminating .xcodeproj merge conflicts
 
 ## Included Skills
 
@@ -32,6 +33,14 @@ Complete document processing capabilities:
 - **docx** - Word document processing
 - **pptx** - PowerPoint presentation handling
 - **pdf** - PDF form filling and manipulation
+
+### 5. XcodeGen Migration
+Migrate iOS projects to XcodeGen to eliminate .xcodeproj merge conflicts:
+- Automated migration workflow with guided steps
+- Support for CocoaPods, Carthage, and Swift Package Manager
+- Build settings verification tools
+- Git hooks integration for automatic project regeneration
+- iOS app templates and common migration patterns
 
 ## Installation
 
@@ -68,6 +77,7 @@ Once installed, skills are automatically available in Claude Code. Simply invoke
 - **Create a skill**: "Use the skill-creator to make a new skill for..."
 - **Build an MCP**: "Use the mcp-builder to create a server for..."
 - **Process documents**: "Use the xlsx skill to analyze this spreadsheet..."
+- **Migrate iOS projects**: "Use the xcodegen-migration skill to convert my iOS project..."
 
 ### Example Conversations
 
@@ -77,6 +87,9 @@ Claude: I'll use the prompt-optimizer skill with the RACEF framework...
 
 You: Help me build an MCP server for my API
 Claude: I'll use the mcp-builder skill to design and implement...
+
+You: My iOS project has too many .xcodeproj merge conflicts
+Claude: I'll use the xcodegen-migration skill to migrate to XcodeGen...
 ```
 
 ## Project Structure
@@ -92,7 +105,8 @@ skills/
 │   ├── docx/                 # Word document processing
 │   ├── pptx/                 # PowerPoint processing
 │   ├── xlsx/                 # Excel spreadsheet handling
-│   └── pdf/                  # PDF form manipulation
+│   ├── pdf/                  # PDF form manipulation
+│   └── xcodegen-migration/   # iOS XcodeGen migration tools
 └── README.md
 ```
 
@@ -113,4 +127,4 @@ See [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-Built for [Claude Code](https://claude.com/claude-code) by Anthropic.
+Built for [Claude Code](https://claude.com/claude-code) by Anthropic.	

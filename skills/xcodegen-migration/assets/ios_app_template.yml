@@ -1,0 +1,236 @@
+# XcodeGen iOS App Template
+# Example project.yml for a complete iOS app with tests and dependencies
+#
+# This template demonstrates:
+# - iOS app target with tests
+# - Framework target
+# - All three dependency managers (CocoaPods, Carthage, SPM)
+# - Common build settings
+# - Scheme configurations
+# - Build scripts
+
+name: MyApp
+
+# Project options
+options:
+  bundleIdPrefix: com.myapp
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "13.0"
+  findCarthageFrameworks: true
+  postGenCommand: |-
+    if [ -f "Podfile" ]; then pod install; fi
+  xcodeVersion: 1510
+  projectFormat: xcode15_0
+
+# Build configurations
+configs:
+  Debug: debug
+  Release: release
+
+# Common settings
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  configs:
+    Debug:
+      DEBUG_INFORMATION_FORMAT: dwarf
+      SWIFT_OPTIMIZATION_LEVEL: -Onone
+      OTHER_SWIFT_FLAGS: "-DDEBUG"
+    Release:
+      DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
+      SWIFT_OPTIMIZATION_LEVEL: -O
+      VALIDATE_PRODUCT: YES
+
+# Swift Packages (Swift Package Manager)
+packages:
+  # Remote package
+  Yams:
+    url: https://github.com/jpsim/Yams
+    from: 5.0.0
+
+  # Local package (if you have one)
+  # LocalPackage:
+  #   path: ../LocalPackage
+
+# Targets
+targets:
+  # Main iOS App
+  MyApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.0"
+    sources:
+      - MyApp
+      - path: Resources
+        type: folder
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.myapp.app
+        INFOPLIST_FILE: MyApp/Info.plist
+        CODE_SIGN_ENTITLEMENTS: MyApp/MyApp.entitlements
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: iPhone Developer
+          PRODUCT_BUNDLE_IDENTIFIER: com.myapp.dev
+        Release:
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          PRODUCT_BUNDLE_IDENTIFIER: com.myapp.app
+          PROVISIONING_PROFILE_SPECIFIER: "MyApp Release"
+    info:
+      path: MyApp/Info.plist
+      properties:
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchStoryboardName: LaunchScreen
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        UIRequiredDeviceCapabilities: [armv7]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIApplicationSupportsIndirectInputEvents: true
+    entitlements:
+      path: MyApp/MyApp.entitlements
+      properties:
+        aps-environment: development
+        com.apple.security.application-groups:
+          - group.com.myapp
+    dependencies:
+      # Target dependency
+      - target: MyFramework
+      # Swift Package
+      - package: Yams
+      # Carthage dependencies (build with: carthage update --platform iOS)
+      - carthage: Alamofire
+      - carthage: Result
+        findFrameworks: true
+      # CocoaPods (handled via Podfile, not listed here)
+      # System frameworks
+      - sdk: Contacts.framework
+      - sdk: libc++.tbd
+    preBuildScripts:
+      - name: SwiftLint
+        script: |
+          if which swiftlint >/dev/null; then
+            swiftlint
+          else
+            echo "warning: SwiftLint not installed"
+          fi
+    postCompileScripts:
+      - name: SwiftGen
+        script: |
+          if which swiftgen >/dev/null; then
+            swiftgen
+          else
+            echo "warning: SwiftGen not installed"
+          fi
+        inputFiles:
+          - $(SRCROOT)/Templates/*
+        outputFiles:
+          - $(SRCROOT)/MyApp/Generated/generated.swift
+    scheme:
+      configVariants: [Debug, Release]
+      testTargets: [MyAppTests, MyAppUITests]
+      gatherCoverageData: true
+      commandLineArguments:
+        "-EnableTesting": true
+        "-MockAPI": false
+      environmentVariables:
+        APP_ENV:
+          Debug: development
+          Release: production
+
+  # Unit Tests
+  MyAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - MyAppTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.myapp.tests
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/MyApp.app/MyApp
+        BUNDLE_LOADER: $(TEST_HOST)
+    dependencies:
+      - target: MyApp
+    scheme:
+      testTargets: [MyAppTests]
+
+  # UI Tests
+  MyAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - MyAppUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.myapp.ui-tests
+        TEST_TARGET_NAME: MyApp
+    dependencies:
+      - target: MyApp
+
+  # Shared Framework
+  MyFramework:
+    type: framework
+    platform: iOS
+    sources:
+      - MyFramework
+      - path: MyFramework/Generated
+        excludes:
+          - "*.generated.swift"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.myapp.framework
+        INFOPLIST_FILE: MyFramework/Info.plist
+        DEFINES_MODULE: YES
+        CURRENT_PROJECT_VERSION: "1"
+    dependencies:
+      - package: Yams
+      - carthage: Alamofire
+      - sdk: Foundation.framework
+
+# Additional file groups (not in any target)
+fileGroups:
+  - Documentation
+  - Scripts
+  - README.md
+  - .github
+
+# Schemes (alternative to target schemes)
+schemes:
+  MyApp:
+    build:
+      targets:
+        MyApp: all
+        MyFramework: [test, run]
+    run:
+      config: Debug
+      commandLineArguments:
+        "-EnableTesting": true
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - MyApp
+        - MyFramework
+      targets:
+        - MyAppTests
+        - MyAppUITests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
