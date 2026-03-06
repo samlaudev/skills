@@ -17,13 +17,6 @@
       "skills": ["./skills/prompt-optimizer"]
     },
     {
-      "name": "skill-creator",
-      "description": "Tool for creating new skills",
-      "source": "./",
-      "strict": false,
-      "skills": ["./skills/skill-creator"]
-    },
-    {
       "name": "mcp-builder",
       "description": "Tool for building MCPs",
       "source": "./",
