@@ -221,7 +221,14 @@ Do not wrap every library merely to create an interface.
 
 Describe the important end-to-end flows required by the spec.
 
-For each important flow show:
+Cover the flows the spec actually depends on, usually two to four. Do not diagram every call path.
+
+Give each flow a diagram, not prose alone. Choose the form the flow calls for:
+
+- a Mermaid `sequenceDiagram` when the flow crosses several modules or external systems and the ordering of calls is the point;
+- a Mermaid `flowchart` when the flow branches on a result, retries, or fans out into follow-up work;
+- a Mermaid `stateDiagram-v2` when the flow is a state machine;
+- a plain `text` chain when the flow is genuinely linear:
 
 ```text
 input
@@ -230,6 +237,16 @@ input
 -> persistence/external boundary
 -> observable result
 ```
+
+If the project's documentation toolchain does not render Mermaid, draw the same diagram in ASCII inside a `text` block.
+
+Quote every Mermaid node and edge label that contains punctuation: colons beyond the first, semicolons, parentheses, commas, or question marks. Use `id["label text"]` for nodes and `-->|"label text"|` for edges. An unquoted semicolon inside a flowchart node label ends the statement early and breaks the parser; quoting the whole label avoids that and every similar surprise. Render every Mermaid block before treating it as done.
+
+When drawing an ASCII diagram, use box-drawing characters (`┌ ┐ └ ┘ │ ─ ├ ┬ ┴ ┼ ▼`), not `|`, `-`, `+`, `v`, or `/` `\`. Compute the column of every connector, vertical, and arrow instead of eyeballing the spacing: pick the parent line's connector column, then place every `│` and `▼` beneath it at that exact column, and a branch node's own children at columns computed the same way from its branch point. A vertical that drifts off its parent's column by even one space is as broken as bad Mermaid syntax; it just fails silently instead of refusing to render.
+
+Name every participant and node after a real module, entry point, or external system from the module map. Generic labels such as `Service`, `Handler`, or `Manager` mean the diagram is not describing this system.
+
+Add one line under each diagram stating what it establishes, such as an ownership rule or a failure path. A diagram with no claim attached is decoration.
 
 Keep this at architecture level.
 
@@ -288,6 +305,8 @@ docs/
 ```
 
 Adapt this to the language and framework rather than copying it literally.
+
+If the repository already has some of this structure in place, verify each directory in the module map actually exists on disk before writing it into the architecture document as though it does. A module that exists only as a target, with its code still sitting in unmigrated legacy files, is a fact worth recording, not a detail to gloss over: name those files and point to whatever tracks their migration (a checker script, a checklist, an issue), rather than presenting the target layout as the current one.
 
 ## 6. Define Coding Rules
 
@@ -366,6 +385,18 @@ It should contain:
 
 Only architecture-driving constraints.
 
+## System Overview
+
+The whole system on one screen, for a reader who has not opened the repository.
+
+One short paragraph saying what the system does and how it is deployed, then a diagram of the top-level components with the external systems they talk to, drawn so the dependency or call direction is visible. Use an ASCII diagram or a Mermaid `flowchart`, whichever the project's documentation renders. Where the repository layout *is* the architecture, label the boxes with the real top-level directories. If drawn in ASCII, follow the box-drawing and column-alignment rule from step 4; a diagram whose arrows do not line up under their boxes fails the same reader it was meant to orient.
+
+When the system runs as more than one process, service, or deployable, follow the diagram with a table of those runtime units:
+
+| Unit | Entry point | Responsibility |
+
+Do not restate the module table or the directory tree here. This section orients; the sections below carry the detail.
+
 ## Module Map
 
 For each module:
@@ -386,11 +417,11 @@ List real external systems and their adapters.
 
 ## Runtime / Data Flow
 
-Describe important system flows.
+The important system flows, each with its diagram from step 4 and the claim that diagram establishes.
 
 ## Project Structure
 
-Describe directory conventions and show the initial architectural skeleton.
+Describe directory conventions and show the actual current skeleton, verified against the repository, not an aspirational one. If a module from the module map does not yet have its own directory, say so and name where its logic currently lives.
 
 ## Assumptions
 
@@ -557,6 +588,12 @@ Verify that:
 - ADR links resolve
 - documentation does not contradict configuration
 - documentation does not duplicate trivially discoverable configuration
+- the system overview diagram exists and shows dependency or call direction
+- every diagram names only modules, entry points, and external systems that exist in the module map and in the scaffold
+- no diagram has drifted below architecture level into private functions
+- every Mermaid diagram renders without a syntax error; punctuation-bearing labels are quoted
+- every ASCII diagram's verticals and arrows sit exactly under their parent connector's column
+- the project structure section's directory tree matches the repository as it exists right now; a module without its own directory yet is called out, not shown as if already scaffolded
 
 ### Scope
 
@@ -576,18 +613,19 @@ This skill is complete only when:
 2. architecture-driving constraints are identified;
 3. there are no unresolved architecture blockers;
 4. the module map is explicit;
-5. module interfaces and test seams are identified;
-6. dependency direction is explicit;
-7. external boundaries are identified;
-8. the initial project structure exists;
-9. project-specific coding rules exist;
-10. project-specific testing rules exist;
-11. agent instruction files point to those rules;
-12. required ADRs have been recorded;
-13. the scaffold builds/typechecks as applicable;
-14. lint/format validation passes as applicable;
-15. the test command runs successfully;
-16. no product feature has been prematurely implemented.
+5. the architecture document opens with a system overview and a diagram of the important flows;
+6. module interfaces and test seams are identified;
+7. dependency direction is explicit;
+8. external boundaries are identified;
+9. the initial project structure exists;
+10. project-specific coding rules exist;
+11. project-specific testing rules exist;
+12. agent instruction files point to those rules;
+13. required ADRs have been recorded;
+14. the scaffold builds/typechecks as applicable;
+15. lint/format validation passes as applicable;
+16. the test command runs successfully;
+17. no product feature has been prematurely implemented.
 
 If any applicable criterion fails, continue working until it passes or report a concrete blocking dependency that cannot be resolved from the spec or repository.
 

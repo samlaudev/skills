@@ -18,7 +18,7 @@ Needs an approved spec: a local Markdown file, an issue produced by `/to-spec`, 
 
 ## The architecture gate
 
-The skill will not create source files until the foundational decisions (constraints, modules, dependency direction, runtime and data flow, project structure, coding rules, testing rules) are settled. Only after that does it write `docs/architecture/architecture.md`, update agent-facing pointers, record any justified ADRs, and scaffold the repository. A later step may refine an earlier decision, but the repository is never scaffolded while foundational decisions are still open.
+The skill will not create source files until the foundational decisions (constraints, modules, dependency direction, runtime and data flow, project structure, coding rules, testing rules) are settled. Only after that does it write `docs/architecture/architecture.md`, update agent-facing pointers, record any justified ADRs, and scaffold the repository. That document opens with a system overview (a component diagram plus, for a multi-process system, its runtime units) and carries a diagram for each important flow, not prose alone. A later step may refine an earlier decision, but the repository is never scaffolded while foundational decisions are still open.
 
 ## Deep modules, not generic layers
 
@@ -35,6 +35,7 @@ The skill will not silently replace an existing structure. It understands the ex
 ## It's working if
 
 - No source files appear before the architecture decisions (constraints, modules, dependency direction) are made explicit.
+- `docs/architecture/architecture.md` opens with a diagram you could hand to someone who has never seen the repository, and its flow section has diagrams rather than only paragraphs.
 - `docs/architecture/architecture.md` has an empty "Open Architecture Questions" section by the time scaffolding starts.
 - The directory structure you get maps to real modules, not to generic buckets like `utils/` or `services/`.
 - Build, typecheck, lint, and the test command all run clean on the scaffold, even with an empty test suite.
