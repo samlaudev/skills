@@ -1,0 +1,5 @@
+interface:
+  display_name: "Architect From Spec"
+  short_description: "Turn a spec into a codebase architecture and scaffold"
+policy:
+  allow_implicit_invocation: false
