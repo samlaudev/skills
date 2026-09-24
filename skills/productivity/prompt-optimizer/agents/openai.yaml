@@ -1,0 +1,5 @@
+interface:
+  display_name: "Prompt Optimizer"
+  short_description: "Optimize a prompt using one of 57 prompt engineering frameworks"
+policy:
+  allow_implicit_invocation: false

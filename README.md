@@ -29,6 +29,7 @@ Skills are organized into bucket folders under `skills/`, each with its own inde
 ## User-invoked
 
 - **[architect-from-spec](./skills/engineering/architect-from-spec/SKILL.md)**: Turn an approved spec into an implementation-ready codebase architecture: modules, seams, dependency rules, project structure, coding and testing rules, then scaffold and verify the skeleton.
+- **[prompt-optimizer](./skills/productivity/prompt-optimizer/SKILL.md)**: Optimize a prompt by matching it to one of 57 prompt engineering frameworks, then writing the prompt in that framework's structure.
 
 ## Model-invoked
 

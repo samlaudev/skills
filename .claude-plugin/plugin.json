@@ -10,9 +10,11 @@
   "keywords": [
     "engineering",
     "skills",
-    "architecture"
+    "architecture",
+    "prompts"
   ],
   "skills": [
-    "./skills/engineering/architect-from-spec"
+    "./skills/engineering/architect-from-spec",
+    "./skills/productivity/prompt-optimizer"
   ]
 }
